@@ -138,7 +138,11 @@ class SingleRedisConnection(internal var pool: JedisPool, internal val connector
             while (!service.isShutdown) {
                 try {
                     pool.resource.use { jedis ->
-                        val socket = Closeable { jedis.close() }
+                        val socket = Closeable {
+                            // Only the subscription thread's use block returns this Jedis to the pool.
+                            jedis.connection.setBroken()
+                            jedis.connection.disconnect()
+                        }
                         resources.add(socket)
                         try {
                             if (service.isShutdown) return@submit
