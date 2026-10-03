@@ -230,3 +230,18 @@ Whale 构建与本地 Maven 发布成功，产物上传至约定目录；完整�
 
 - 按用户后续授权提交本轮 9 个仓库的源码与文档。Whale 的 CraftEngineHandler、CustomFishingHandler 源码统一到 `flexible.handler`，补跑构建与本地 Maven 发布通过；运行 JAR 的 SHA-256 与已安装产物完全相同，无需再次部署。
 - 按用户授权清理 `~/Minecraft` 根目录的 11 个上传 JAR；删除前逐项复核清单哈希与全部目标节点安装哈希一致。根目录仅保留 `SlimeUpdater-1.0-SNAPSHOT-all.jar`，未删除插件目录、待更新目录或任何非 JAR 文件。Worker-3 本轮重新启动后的联通验收仍待完成。
+
+## Velocity 编译依赖升级及直接替换（2026-10-02）
+
+- 依据当前 `PROJECTS.md`，将 CrabKotlin Velocity、SlimeMasterNext、Cubozoa、MultiAuth 的 Velocity API 依赖统一为 `4.2.1-SNAPSHOT`。MultiAuth 的内部实现编译依赖同步到 PaperMC 构建 #36；服务端 jar 和 Gradle 解析的 API jar 均与官方校验和一致。
+- 四个项目构建成功，CrabKotlin 和 SlimeMasterNext API 已发布本地 Maven。未遇到 API 编译错误，没有为此次升级修改业务源码或新增测试单元；原有未提交改动保留。
+- 按用户授权直接原子替换 `s1.dimc.cloud:~/Minecraft/SlimeCargo-Master/plugins` 中四个同名运行 jar，旧文件已被替换。没有检查运行状态或重启，也没有提交、推送。其余 11 个 Velocity 插件 jar 的哈希保持不变，目录内没有重复插件 ID。
+
+| 运行 jar | 替换后 SHA-256 |
+| --- | --- |
+| CrabKotlin-2.3.20-velocity.jar | `867284411b9578b6a045c9570a3b3b7bbccf8653ce56598e8d845f2a532fb777` |
+| SlimeMasterNext-1.0.1.jar | `d2c275c10f323e1eb9a37d03fe2ec7aee58c02616269f4ff15172995cf129a5f` |
+| Cubozoa-1.0.0.jar | `f28f6a4dc90009fba2e4a8a5853f32a112f33e34da8b22ce6e9e6a5f658f6aa5` |
+| MultiAuth-2.2.3.jar | `d8fab17a5197c2ed0f5388db40f9bf848d4ada51e660748f99ca0a1e207a42e7` |
+
+- 四份安装文件的 SHA-256 与本地运行产物一致；Cubozoa 和 MultiAuth 重建后的哈希与原安装包相同。验证覆盖构建、描述符、完整性及文件替换，不代表新版本已加载或完成运行/客户端验收。Paper 插件仅按后续请求检查更新，不操作其 jar。

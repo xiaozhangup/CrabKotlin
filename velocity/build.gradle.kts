@@ -14,7 +14,7 @@ base.archivesName.set(artifactName)
 
 dependencies {
     api(project(":common"))
-    compileOnly("com.velocitypowered:velocity-api:4.1.1-SNAPSHOT")
+    compileOnly("com.velocitypowered:velocity-api:4.2.1-SNAPSHOT")
 }
 
 tasks.processResources {
